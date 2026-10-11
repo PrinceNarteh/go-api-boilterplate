@@ -1,4 +1,4 @@
-module github.com/PrinceNarteh/go-api-boilerplate
+module github.com/PrinceNarteh/go-api
 
 go 1.27.1
 
