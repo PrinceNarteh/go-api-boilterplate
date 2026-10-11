@@ -1,0 +1,49 @@
+package config
+
+import (
+	"os"
+	"time"
+)
+
+var Env = initConfig()
+
+func initConfig() *Config {
+	return &Config{
+		App: appConfig{
+			Port:    getEnv("APP_PORT", ":4000"),
+			Version: getEnv("APP_VERSION", "0.0.1"),
+		},
+		DB: dbConfig{
+			URI:      getEnv("DB_URI", ""),
+			Username: getEnv("DB_USERNAME", "admin"),
+			Password: getEnv("DB_PASSWORD", "root"),
+			Name:     getEnv("DB_NAME", "test"),
+		},
+		JWT: jwtConfig{
+			Secret:    []byte(getEnv("JWT_SECRET", "ce26a4a7bead33e504b03f4e13f88015c237f039fe336fec8344bade7d5b0f50e")),
+			ExpiresAt: getEnvAsDuration("JWT_EXPIRES_AT", 15*time.Minute),
+		},
+	}
+}
+
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
+func getEnvAsDuration(key string, fallback time.Duration) time.Duration {
+	timeAsStr := getEnv(key, "")
+
+	if timeAsStr == "" {
+		return fallback
+	}
+
+	duration, err := time.ParseDuration(timeAsStr)
+	if err != nil {
+		return fallback
+	}
+
+	return duration
+}
