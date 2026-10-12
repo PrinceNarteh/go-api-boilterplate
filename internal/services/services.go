@@ -1,8 +1,14 @@
 // Package services
 package services
 
-type Services struct{}
+import "github.com/PrinceNarteh/go-api/internal/repositories"
 
-func NewServices() *Services {
-	return &Services{}
+type Services struct {
+	Auth AuthService
+}
+
+func NewServices(repo *repositories.Repositories) *Services {
+	return &Services{
+		Auth: &authService{repo: repo},
+	}
 }

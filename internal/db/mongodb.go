@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/PrinceNarteh/go-api/config"
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
@@ -43,6 +44,23 @@ func ConnectDB() (*MongoDBClient, error) {
 		Client:   client,
 		Database: client.Database(config.Env.DB.Name),
 	}, nil
+}
+
+func (c *MongoDBClient) CreateConstraints() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	indexModel := mongo.IndexModel{
+		Keys:    bson.D{{Key: "email", Value: 1}},
+		Options: options.Index().SetUnique(true).SetName("email_unique"),
+	}
+	name, err := c.Database.Collection("users").Indexes().CreateOne(ctx, indexModel)
+	if err != nil {
+		return fmt.Errorf("failed to create unique index: %v", name)
+	}
+
+	log.Printf("Successfully created unique index: %s\n", name)
+	return nil
 }
 
 func (c *MongoDBClient) Disconnect() error {
