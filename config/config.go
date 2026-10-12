@@ -22,6 +22,8 @@ type dbConfig struct {
 }
 
 type jwtConfig struct {
-	Secret    []byte
-	ExpiresAt time.Duration
+	AccessTokenSecret  []byte
+	AccessTokenTTL     time.Duration
+	RefreshTokenSecret []byte
+	RefreshTokenTTL    time.Duration
 }
