@@ -22,6 +22,11 @@ type User struct {
 	UpdatedAt time.Time     `bson:"updatedAt" json:"updatedAt"`
 }
 
+type Tokens struct {
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
+}
+
 func (u User) Validate() error {
 	return validation.ValidateStruct(&u,
 		validation.Field(&u.FirstName, validation.Required, validation.Length(2, 50)),

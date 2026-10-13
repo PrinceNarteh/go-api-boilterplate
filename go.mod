@@ -5,6 +5,7 @@ go 1.27.1
 require (
 	github.com/go-ozzo/ozzo-validation/v4 v4.4.1
 	github.com/gofiber/fiber/v3 v3.5.0
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	go.mongodb.org/mongo-driver/v2 v2.9.2
 	golang.org/x/crypto v0.58.0
 )
